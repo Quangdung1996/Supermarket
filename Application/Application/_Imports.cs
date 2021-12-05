@@ -2,3 +2,9 @@
 global using Domain.Common;
 global using Domain.Entities;
 global using Microsoft.EntityFrameworkCore;
+global using Application.Common.Interfaces;
+global using Domain.Events;
+global using MediatR;
+global using AutoMapper;
+global using AutoMapper.QueryableExtensions;
+global using Application.Common.Mappings;

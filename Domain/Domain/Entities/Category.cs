@@ -2,7 +2,7 @@
 
 public class Category : AuditableEntity, IHasDomainEvent
 {
-    public int CategoryId { get; set; }
+    public int Id { get; set; }
 
     [Required]
     public string Name { get; set; }

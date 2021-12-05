@@ -1,0 +1,71 @@
+﻿@page "/categories"
+
+@inject NavigationManager NavigationManager
+@using MediatR
+@inject IMediator Mediator
+
+<h3>Categories</h3>
+
+@if (categories != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in categories)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>
+                        <button type="button" @onclick="@(() => Update(@item.Id))" class="btn btn-link">Edit</button>
+                        <button type="button" @onclick="@(() => DeleteAsync(@item.Id))" class="btn btn-link">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+<br />
+<button type="button" @onclick="OnClickAddCategory">Add Category</button>
+
+
+
+@code {
+    private List<CategoryDto> categories;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        base.OnInitialized();
+        await LoadCategoriesAsync();
+    }
+
+
+    private void Update(int id)
+    {
+        NavigationManager.NavigateTo($"/editcategory/{id}");
+    }
+
+    private async Task DeleteAsync(int categoryId)
+    {
+        var results = await Mediator.Send(new DeleteCategoryCommand(categoryId));
+        await LoadCategoriesAsync();
+    }
+
+    private async Task LoadCategoriesAsync()
+    {
+        var results = await Mediator.Send(new GetCategoryWithPaginationQuery());
+        categories = results.Items;
+    }
+
+    private void OnClickAddCategory()
+    {
+        NavigationManager.NavigateTo("/add-category");
+    }
+}

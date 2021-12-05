@@ -30,7 +30,22 @@
       "ProjectGuid": "f9c9676b-e57d-48d8-8ce9-06bd20e076d9",
       "DisplayName": "Infrastructure",
       "ColorIndex": 4
+    },
+    "529ae373-216f-463a-8f4f-daba3f230073": {
+      "ProjectGuid": "529ae373-216f-463a-8f4f-daba3f230073",
+      "DisplayName": "WebApp",
+      "ColorIndex": 5
+    },
+    "291c5e9e-0927-4b47-a8af-62b61f26eadc": {
+      "ProjectGuid": "291c5e9e-0927-4b47-a8af-62b61f26eadc",
+      "DisplayName": "BlazorApp1",
+      "ColorIndex": 6
+    },
+    "4b081b0f-9b26-40b9-8dea-31faefc0cd2a": {
+      "ProjectGuid": "4b081b0f-9b26-40b9-8dea-31faefc0cd2a",
+      "DisplayName": "WebApp",
+      "ColorIndex": 7
     }
   },
-  "NextColorIndex": 5
+  "NextColorIndex": 8
 }

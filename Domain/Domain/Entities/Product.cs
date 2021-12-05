@@ -2,7 +2,7 @@
 
 public class Product: AuditableEntity, IHasDomainEvent
 {
-    public int ProductId { get; set; }
+    public int Id { get; set; }
 
     [Required]
     public int? CategoryId { get; set; }

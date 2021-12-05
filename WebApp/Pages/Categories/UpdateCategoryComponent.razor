@@ -1,0 +1,61 @@
+﻿@page "/editcategory/{id}"
+@using MediatR
+@inject IMediator Mediator
+@inject NavigationManager NavigationManager
+
+<h3>Edit Category</h3>
+<br />
+@if (category != null)
+{
+    <EditForm Model="category" OnValidSubmit="OnValidSumit">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
+
+        <div class="form-group">
+            <label for="name">Name</label>
+            <InputText id="name" @bind-Value="category.Name" class="form-control"></InputText>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <InputText id="description" @bind-Value="category.Description" class="form-control"></InputText>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-primary" @onclick="OnCancel">Cancel</button>
+    </EditForm>
+
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    private CategoryDto category;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        base.OnParametersSet();
+
+        if (int.TryParse(this.Id, out int id))
+        {
+            this.category = await Mediator.Send(new GetCategoryQuery(id)) ?? new CategoryDto() { Id = 0 };
+        }
+    }
+
+    private async Task OnValidSumit()
+    {
+        await Mediator.Send(new UpdateCategoryCommand()
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description
+            });
+
+        NavigationManager.NavigateTo("/categories");
+    }
+
+    private void OnCancel()
+    {
+        NavigationManager.NavigateTo("/categories");
+    }
+}
