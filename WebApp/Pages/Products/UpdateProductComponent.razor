@@ -1,0 +1,92 @@
+﻿@page "/edit-product/{id}"
+@using MediatR
+@inject IMediator Mediator
+@inject NavigationManager NavigationManager
+
+
+<h3>Edit Product</h3>
+<br />
+@if (product != null)
+{
+    <EditForm Model="product" OnValidSubmit="OnValidSumit">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
+
+        <div class="form-group">
+            <label for="name">Name</label>
+            <InputText id="name" @bind-Value="product.Name" class="form-control"></InputText>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" @bind="product.CategoryId" class="form-control">
+                <option selected></option>
+                @foreach (var cat in categories)
+                {
+                    <option value="@cat.Id">@cat.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Price</label>
+            <InputNumber id="price" @bind-Value="product.Price" @bind-Value:format="F2" class="form-control"></InputNumber>
+        </div>
+
+        <div class="form-group">
+            <label for="qty">Quantity</label>
+            <InputNumber id="qty" @bind-Value="product.Quantity" class="form-control"></InputNumber>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-primary" @onclick="OnCancel">Cancel</button>
+    </EditForm>
+
+}
+
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    private ProductDto product;
+    private IEnumerable<CategoryDto> categories;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        base.OnParametersSet();
+
+        if (int.TryParse(this.Id, out int id))
+        {
+            this.product = await Mediator.Send(new GetProductQuery(id));
+        }
+
+        await LoadCategoriesAsync();
+    }
+
+    private async Task OnValidSumit()
+    {
+        await Mediator.Send(new UpdateProductCommand()
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Quantity = product.Quantity,
+                CategoryId = product.CategoryId,
+            });
+
+        NavigationManager.NavigateTo("/products");
+    }
+
+    private void OnCancel()
+    {
+        NavigationManager.NavigateTo("/products");
+    }
+
+
+    private async Task LoadCategoriesAsync()
+    {
+        var results = await Mediator.Send(new GetCategoryWithPaginationQuery());
+        categories = results.Items;
+    }
+}

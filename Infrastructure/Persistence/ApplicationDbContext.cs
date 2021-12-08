@@ -26,7 +26,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
     public DbSet<Category> Categories => Set<Category>();
 
-    public DbSet<Product> Product => Set<Product>();
+    public DbSet<Product> Products => Set<Product>();
 
     public DbSet<Transaction> Transactions => Set<Transaction>();
 
